@@ -157,4 +157,57 @@ esperado =  1600000  Obtido =  1600000  tempo =  49.638991299958434
 ```
 podemos ver que a versão sem semáforo acabou obtendo menos do que esperado porem em um tempo mais curto, já o com semáforo o obtido é o mesmo que esperado ou seja sem perdas porem em um tempo de execução muito maior.
 
-## PARTE 3
+## PARTE 3 - Deadlock
+
+### Como o problema funciona
+O deadlock é uma situação na qual dois ou mais processos ficam bloqueados, esperando uns pelos outros. Normalmente ocorre quando uma thread precisa de um recurso que já está com outra, e ela não é capaz de prosseguir sua tarefa pois o que ela precisa esta com a thread original, assim gerando um ciclo infinito onde nada é executado.
+
+### Pseudocódigo da versão que trava
+```
+LOCK_A, LOCK_B = locks distintos
+Thread 1:
+adquirir(LOCK_A)
+dormir(50ms) // aumenta a chance do deadlock
+adquirir(LOCK_B)
+imprimir "T1 concluiu"
+liberar(LOCK_B)
+liberar(LOCK_A)
+Thread 2:
+adquirir(LOCK_B)
+dormir(50ms)
+adquirir(LOCK_A)
+imprimir "T2 concluiu"
+liberar(LOCK_A)
+liberar(LOCK_B)
+```
+### Log da execução da trava
+```
+Thread 1 adiquiriu LOCK_A
+Thread 2 adiquiriu LOCK_B
+```
+Nesse cenário, ocorre o deadlock e então nenhuma das threads consegue ser concluída.
+
+### Pseudocódigo da versão corrigida
+```
+Regra global: sempre adquirir LOCK_A antes de LOCK_B,
+em TODAS as threads.
+
+Thread 1 e Thread 2:
+adquirir(LOCK_A)
+adquirir(LOCK_B)
+// secao critica
+liberar(LOCK_B)
+liberar(LOCK_A)
+```
+
+### Log da execução corrigida
+```
+Thread 1 pegou A
+Thread 1 concluiu
+Thread 2 pegou A
+Thread 2 concluiu
+```
+Na versão corrigida, a thread 2 espera a thread 1 ser concluída para entar começar a executar, o que evita completamente o problema do deadlock
+
+### Condição de Coffman
+Na versão corrigida a condição quebrada foi a espera circular, já que na versão corrigida o ciclo é quebrado e as threads seguem uma mesma ordem.
