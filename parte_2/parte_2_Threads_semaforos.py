@@ -26,13 +26,18 @@ def tarefa_sem_semaforo():
         contador = temp + 1
 
 
-def imprimir(começo, final, vezes, contador):
-    print(vezes + 1 , " tentativa")
-    print("esperado = ", T*M , " Obtido = ", contador," tempo = ", (final - começo))
-    print() 
+def imprimir(tipo,começo, final, vezes, contador):
+
+    if tipo == "sem":
+        tipo = "sem semaforo"
+    else:
+        tipo = "com semaforo"
+    print(tipo, " | " , vezes + 1 , " | ",  T*M , " | ", contador," | ", (final - começo))
 
 
-print("==== sem semaforo====")
+
+print("| Versão | Execução | Esperado | Obtido | Tempo(s) | ")
+print("|---|---|---|---|---|")
 for i in range(3):
     inicio = time.perf_counter()
 
@@ -48,10 +53,10 @@ for i in range(3):
         t.join()
 
     final = time.perf_counter()
-    imprimir(inicio, final, i, contador)
+    imprimir("sem", inicio, final, i, contador)
 
 
-print("==== com semaforo====")
+
 for i in range(3):
     inicio = time.perf_counter() 
 
@@ -67,4 +72,4 @@ for i in range(3):
         t.join()
 
     final = time.perf_counter() 
-    imprimir(inicio, final, i, contador)
+    imprimir("com" , inicio, final, i, contador)
