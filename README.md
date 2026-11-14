@@ -118,19 +118,19 @@ Globais:
 count = 0
 sem = Semaforo(permissoes = 1, justo = true) // binário com FIFO
 Funcao tarefa():
-para i de 1 ate M:
-// VERSAO 1 — sem sincronizacao (condicao de corrida):
-count = count + 1
-// VERSAO 2 — com semaforo (correta):
-sem.adquirir()
-try:
-count = count + 1
-finally:
-sem.liberar()
+    para i de 1 ate M:
+    // VERSAO 1 — sem sincronizacao (condicao de corrida):
+    count = count + 1
+    // VERSAO 2 — com semaforo (correta):
+    sem.adquirir()
+    try:
+        count = count + 1
+    finally:
+        sem.liberar()
 Programa principal:
-iniciar T threads executando tarefa()
-esperar todas terminarem
-imprimir esperado = T*M, obtido = count, tempo = ...
+    iniciar T threads executando tarefa()
+    esperar todas terminarem
+    imprimir esperado = T*M, obtido = count, tempo = ...
 ```
 ### Log de uma execução dos semáforos
 ```
