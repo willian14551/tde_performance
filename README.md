@@ -96,6 +96,65 @@ Como deu para ver: Nenhum filósofo chegou a comer. Cada um pegou o seu garfo es
 
 ## PARTE 1 - Versão corrigida
 
-## PARTE 2
+## PARTE 2 - Threads e semáforos
+
+### Como funciona
+O programa usa um semáforo que controla os recursos adquirindo e liberando, isso resolve o problema de sobrescrita, onde muitas threads tentam modificar a mesma variável, fazendo com que alguns resultados das threads sejam perdido.
+Usando o semáforo com (with) para adquirir ele deixa só 1 thread modificara por vez e liberando para a próxima, evitando o problema da sobrescrita ao custo de mais tempo pois na área critica (with) se torna sequencial.
+
+### GIL
+O python por ser uma linguagem interpretada ele executa as instrução sequencial, o GIL (Global Interpreter Lock) impede a execução paralela. Em operações rápidas como no contador do sem semáforo e com semáforo acabam sendo iguais, o sem semáforo acaba não tendo perdas. Para poder ver essa diferença adicionamos uma pausa (time.sleep) para CPU poder passar para a outra thread e pode ver essa sobrescrita.
+
+### Como executar
+Abra o cmd ou terminal correspondente (No caso abaixo, utilizamos o cmd):
+
+```
+cd parte_2
+python parte_2_Threads_semaforos.py
+```
+### Pseudocódigo dos semáforos
+```
+Globais:
+count = 0
+sem = Semaforo(permissoes = 1, justo = true) // binário com FIFO
+Funcao tarefa():
+para i de 1 ate M:
+// VERSAO 1 — sem sincronizacao (condicao de corrida):
+count = count + 1
+// VERSAO 2 — com semaforo (correta):
+sem.adquirir()
+try:
+count = count + 1
+finally:
+sem.liberar()
+Programa principal:
+iniciar T threads executando tarefa()
+esperar todas terminarem
+imprimir esperado = T*M, obtido = count, tempo = ...
+```
+### Log de uma execução dos semáforos
+```
+==== sem semaforo====
+1  tentativa
+esperado =  1600000  Obtido =  205004  tempo =  2.3059701999882236
+
+2  tentativa
+esperado =  1600000  Obtido =  205184  tempo =  3.1229175999760628
+
+3  tentativa
+esperado =  1600000  Obtido =  200233  tempo =  4.2392095000250265
+
+==== com semaforo====
+1  tentativa
+esperado =  1600000  Obtido =  1600000  tempo =  37.88100360002136
+
+2  tentativa
+esperado =  1600000  Obtido =  1600000  tempo =  42.77786390000256
+
+3  tentativa
+esperado =  1600000  Obtido =  1600000  tempo =  49.638991299958434
+
+```
+podemos ver que a versão sem semáforo acabou obtendo menos do que esperado porem em um tempo mais curto, já o com semáforo o obtido é o mesmo que esperado ou seja sem perdas porem em um tempo de execução muito maior.
 
 ## PARTE 3
