@@ -134,25 +134,14 @@ Programa principal:
 ```
 ### Log de uma execução dos semáforos
 ```
-==== sem semaforo====
-1  tentativa
-esperado =  1600000  Obtido =  205004  tempo =  2.3059701999882236
-
-2  tentativa
-esperado =  1600000  Obtido =  205184  tempo =  3.1229175999760628
-
-3  tentativa
-esperado =  1600000  Obtido =  200233  tempo =  4.2392095000250265
-
-==== com semaforo====
-1  tentativa
-esperado =  1600000  Obtido =  1600000  tempo =  37.88100360002136
-
-2  tentativa
-esperado =  1600000  Obtido =  1600000  tempo =  42.77786390000256
-
-3  tentativa
-esperado =  1600000  Obtido =  1600000  tempo =  49.638991299958434
+| Versão | Execução | Esperado | Obtido | Tempo(s) | 
+|---|---|---|---|---|
+sem semaforo  |  1  |  1600000  |  200356  |  2.2110439999960363
+sem semaforo  |  2  |  1600000  |  200184  |  3.5485205000150017
+sem semaforo  |  3  |  1600000  |  200380  |  3.231002399988938
+com semaforo  |  1  |  1600000  |  1600000  |  16.105979299987666
+com semaforo  |  2  |  1600000  |  1600000  |  15.928699699987192
+com semaforo  |  3  |  1600000  |  1600000  |  15.700154099962674
 
 ```
 podemos ver que a versão sem semáforo acabou obtendo menos do que esperado porem em um tempo mais curto, já o com semáforo o obtido é o mesmo que esperado ou seja sem perdas porem em um tempo de execução muito maior.
