@@ -133,7 +133,7 @@ Programa principal:
     imprimir esperado = T*M, obtido = count, tempo = ...
 ```
 ### Log da tabela
-```
+
 | Versão | Execução | Esperado | Obtido | Tempo(s) | 
 |---|---|---|---|---|
 sem semaforo  |  1  |  1600000  |  200356  |  2.2110439999960363
@@ -143,7 +143,7 @@ com semaforo  |  1  |  1600000  |  1600000  |  16.105979299987666
 com semaforo  |  2  |  1600000  |  1600000  |  15.928699699987192
 com semaforo  |  3  |  1600000  |  1600000  |  15.700154099962674
 
-```
+
 podemos ver que a versão sem semáforo acabou obtendo menos do que esperado porem em um tempo mais curto, já o com semáforo o obtido é o mesmo que esperado ou seja sem perdas porem em um tempo de execução muito maior.
 
 ## PARTE 3 - Deadlock
