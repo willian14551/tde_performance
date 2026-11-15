@@ -132,7 +132,7 @@ Programa principal:
     esperar todas terminarem
     imprimir esperado = T*M, obtido = count, tempo = ...
 ```
-### Log de uma execução dos semáforos
+### Log da tabela
 ```
 | Versão | Execução | Esperado | Obtido | Tempo(s) | 
 |---|---|---|---|---|
