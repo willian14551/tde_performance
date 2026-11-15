@@ -95,6 +95,22 @@ Deadlock! Todos os filósofos continuam com fome há mais de 3 segundos e ningu�
 Como deu para ver: Nenhum filósofo chegou a comer. Cada um pegou o seu garfo esquerdo e ficou tentando pegar o direito, e as cinco últimas linhas do log mostram isso.
 
 ## PARTE 1 - Versão corrigida
+Diferente da versão ingênua, na corrigida os filósofos tentam pegar primeiro o garfo com o menor número, em vez do garfo que está a esquerda. Caso o garfo que o filósofo quer já esteja sendo usado, a thread não fica bloqueada no "acquire" até o vizinho soltar, ela espera um tempo definido e depois tenta adquiri-lo novamente. Além disso, se o filósofo já possuir um garfo, mas falhar em conseguir o segundo, o primeiro garfo é liberado.
+
+### Condição de Coffman
+A condição de Coffman negada na versão corrigida foi a Espera circular, pois os filósofos irão tentar pegar o garfo de menor número, assim sobrará um garfo (o maior) e não será formado um ciclo completo em que cada um segura um garfo e espera o vizinho liberar o próximo garfo, formando um ciclo completo.
+
+### Como executar
+Abra o cmd ou terminal correspondente (No caso abaixo, utilizamos o cmd):
+```
+cd parte_1
+python parte_1_versao_corrigida.py
+```
+No topo do arquivo ficam as constantes usadas no programa. Se quiser testar sem a pausa entre pegar o garfo, basta substituir o valor da constante "PAUSA_ENTRE_GARFOS" para 0
+
+### Pseudocódigo da versão corrigida
+
+### Log de uma execução sem deadlock
 
 ## PARTE 2 - Threads e semáforos
 
