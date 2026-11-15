@@ -13,6 +13,7 @@ TEMPO_COMER_MAX = 0.3
 
 garfos = {numero: threading.Lock() for numero in range(1, NUM_FILOSOFOS + 1)}
 estados = {numero: "pensando" for numero in range(1, NUM_FILOSOFOS + 1)}
+refeicoes = {numero: 0 for numero in range(1, NUM_FILOSOFOS + 1)}
 trava_saida = threading.Lock()
 inicio = time.time()
 
@@ -62,6 +63,7 @@ def filosofo(numero):
             pegar_segundo_garfo = pegar_garfo(numero, maior)
             if pegar_segundo_garfo:
                 mudar_estado(numero, "comendo")
+                refeicoes[numero] += 1
                 time.sleep(random.uniform(TEMPO_COMER_MIN, TEMPO_COMER_MAX))
                 registrar(f"Filósofo {numero} terminou de comer.")
                 soltar_garfo(numero, direito)
@@ -88,8 +90,9 @@ def main():
         time.sleep(1)
         segundos += 1
         if todos_com_fome():
+            refeicoes_antes = sum(refeicoes.values())
             time.sleep(3)
-            if todos_com_fome():
+            if todos_com_fome() and sum(refeicoes.values()) == refeicoes_antes:
                 print("Deadlock! Todos os filósofos continuam com fome há mais de 3 segundos e ninguém consegue comer")
                 return
 
