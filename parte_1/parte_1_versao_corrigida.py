@@ -24,47 +24,56 @@ def mudar_estado(numero, estado):
     estados[numero] = estado
     registrar(f"Filósofo {numero} está {estado}")
 
-def pegar_garfo(numero, garfo, lado):
-    registrar(f"Filósofo {numero} tenta pegar o garfo {garfo} ({lado})")
-    if lado == "direito":
-        if garfos[garfo].acquire(False):
-            registrar(f"Filósofo {numero} pegou o garfo {garfo} ({lado})")
-            return True
-        else:
-            esquerdo = numero - 1 if numero > 1 else NUM_FILOSOFOS
-            registrar(f"Filósofo {numero} não consegue o garfo {garfo} ({lado}), devolve o garfo {esquerdo} (esquerdo)")
-            garfos[esquerdo].release()
-            return False
+def pegar_garfo(numero, garfo):
+    if garfo == numero:
+        lado = "direito"
     else:
-        garfos[garfo].acquire()
+        lado = "esquerdo"
+    registrar(f"Filósofo {numero} tenta pegar o garfo {garfo} ({lado})")
+    if garfos[garfo].acquire(False):
         registrar(f"Filósofo {numero} pegou o garfo {garfo} ({lado})")
         return True
+    else:
+        registrar(f"Filósofo {numero} não consegue o garfo {garfo} ({lado})")
+        return False
 
-def soltar_garfo(numero, garfo, lado):
+def soltar_garfo(numero, garfo):
+    if garfo == numero:
+        lado = "direito"
+    else:
+        lado = "esquerdo"
     garfos[garfo].release()
     registrar(f"Filósofo {numero} soltou o garfo {garfo} ({lado})")
 
 def filosofo(numero):
     direito = numero
     esquerdo = numero - 1 if numero > 1 else NUM_FILOSOFOS
+    menor = min(direito, esquerdo)
+    maior = max(direito, esquerdo)
 
     while True:
         mudar_estado(numero, "pensando")
         time.sleep(random.uniform(TEMPO_PENSAR_MIN, TEMPO_PENSAR_MAX))
 
         mudar_estado(numero, "com fome")
-        pegar_garfo(numero, esquerdo, "esquerdo")
-        time.sleep(PAUSA_ENTRE_GARFOS)
-        pegar_garfo_direito = pegar_garfo(numero, direito, "direito")
-        if pegar_garfo_direito:
-            mudar_estado(numero, "comendo")
-            time.sleep(random.uniform(TEMPO_COMER_MIN, TEMPO_COMER_MAX))
-            registrar(f"Filósofo {numero} terminou de comer.")
-            soltar_garfo(numero, direito, "direito")
-            soltar_garfo(numero, esquerdo, "esquerdo")
+        pegar_primeiro_garfo = pegar_garfo(numero, menor)
+        if pegar_primeiro_garfo:
+            time.sleep(PAUSA_ENTRE_GARFOS)
+            pegar_segundo_garfo = pegar_garfo(numero, maior)
+            if pegar_segundo_garfo:
+                mudar_estado(numero, "comendo")
+                time.sleep(random.uniform(TEMPO_COMER_MIN, TEMPO_COMER_MAX))
+                registrar(f"Filósofo {numero} terminou de comer.")
+                soltar_garfo(numero, direito)
+                soltar_garfo(numero, esquerdo)
+            else:
+                soltar_garfo(numero, menor)
+                espera = 0.2
+                registrar(f"Filósofo {numero} não consegue os 2 garfos, espera {espera}s para tentar novamente.")
+                time.sleep(espera)
         else:
             espera = 0.2
-            registrar(f"Filósofo {numero} não consegue os 2 garfos, espera {espera}s para tentar novamente.")
+            registrar(f"Filósofo {numero} espera {espera}s para tentar novamente.")
             time.sleep(espera)
 
 def todos_com_fome():
