@@ -115,11 +115,11 @@ No topo do arquivo ficam as constantes usadas no programa. Se quiser testar sem 
 ## PARTE 2 - Threads e semáforos
 
 ### Como funciona
-O programa usa um semáforo que controla os recursos adquirindo e liberando, isso resolve o problema de sobrescrita, onde muitas threads tentam modificar a mesma variável, fazendo com que alguns resultados das threads sejam perdido.
-Usando o semáforo com (with) para adquirir ele deixa só 1 thread modificara por vez e liberando para a próxima, evitando o problema da sobrescrita ao custo de mais tempo pois na área critica (with) se torna sequencial.
+O programa usa um semáforo que controla os recursos adquirindo e liberando, isso resolve o problema de sobrescrita, onde muitas threads tentam modificar a mesma variável, fazendo com que alguns resultados das threads sejam perdidos.
+Usando o semáforo com (with) para adquirir ele deixa só 1 thread modificara por vez e liberando para a próxima, evitando o problema da sobrescrita ao custo de mais tempo pois na área crítica (with) se torna sequencial.
 
 ### GIL
-O python por ser uma linguagem interpretada ele executa as instrução sequencial, o GIL (Global Interpreter Lock) impede a execução paralela. Em operações rápidas como no contador do sem semáforo e com semáforo acabam sendo iguais, o sem semáforo acaba não tendo perdas. Para poder ver essa diferença adicionamos uma pausa (time.sleep) para CPU poder passar para a outra thread e pode ver essa sobrescrita.
+O python por ser uma linguagem interpretada ele executa as instruções sequenciais, o GIL (Global Interpreter Lock) impede a execução paralela. Em operações rápidas como no contador do sem semáforo e com semáforo acabam sendo iguais, o sem semáforo acaba não tendo perdas. Para poder ver essa diferença adicionamos uma pausa (time.sleep) para CPU poder passar para a outra thread e poder ver essa sobrescrita.
 
 ### Como executar
 Abra o cmd ou terminal correspondente (No caso abaixo, utilizamos o cmd):
@@ -160,7 +160,7 @@ com semaforo  |  2  |  1600000  |  1600000  |  15.928699699987192
 com semaforo  |  3  |  1600000  |  1600000  |  15.700154099962674
 
 
-podemos ver que a versão sem semáforo acabou obtendo menos do que esperado porem em um tempo mais curto, já o com semáforo o obtido é o mesmo que esperado ou seja sem perdas porem em um tempo de execução muito maior.
+Como podemos ver que a versão sem semáforo acabou obtendo menos do que esperado porem em um tempo mais curto, já o com semáforo o obtido é o mesmo que esperado ou seja sem perdas porem em um tempo de execução muito maior.
 
 ## PARTE 3 - Deadlock
 
