@@ -132,7 +132,7 @@ python parte_2_Threads_semaforos.py
 ```
 Globais:
 count = 0
-sem = Semaforo(permissoes = 1, justo = true) // binário com FIFO
+sem = Semaforo(1)
 Funcao tarefa():
     para i de 1 ate M:
     // VERSAO 1 — sem sincronizacao (condicao de corrida):
