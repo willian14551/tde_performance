@@ -1,6 +1,10 @@
 import random
 import threading
 import time
+from collections import deque
+
+fila = deque()
+garfos_condition = threading.Condition()
 
 NUM_FILOSOFOS = 5
 PAUSA_ENTRE_GARFOS = 0.5
@@ -57,26 +61,34 @@ def filosofo(numero):
         time.sleep(random.uniform(TEMPO_PENSAR_MIN, TEMPO_PENSAR_MAX))
 
         mudar_estado(numero, "com fome")
-        pegar_primeiro_garfo = pegar_garfo(numero, menor)
-        if pegar_primeiro_garfo:
-            time.sleep(PAUSA_ENTRE_GARFOS)
+        pegar_primeiro_garfo = False
+        pegar_segundo_garfo = False
+        with garfos_condition:
+            fila.append(numero)
+            while fila[0] != numero or garfos[menor].locked() or garfos[maior].locked():
+                garfos_condition.wait()
+            pegar_primeiro_garfo = pegar_garfo(numero, menor)
             pegar_segundo_garfo = pegar_garfo(numero, maior)
+        if pegar_primeiro_garfo:
             if pegar_segundo_garfo:
                 mudar_estado(numero, "comendo")
+                with garfos_condition:
+                    fila.popleft()
                 refeicoes[numero] += 1
                 time.sleep(random.uniform(TEMPO_COMER_MIN, TEMPO_COMER_MAX))
                 registrar(f"Filósofo {numero} terminou de comer.")
-                soltar_garfo(numero, direito)
-                soltar_garfo(numero, esquerdo)
+                with garfos_condition:
+                    soltar_garfo(numero, direito)
+                    soltar_garfo(numero, esquerdo)
+                    garfos_condition.notify_all()
             else:
-                soltar_garfo(numero, menor)
-                espera = 0.2
-                registrar(f"Filósofo {numero} não consegue os 2 garfos, espera {espera}s para tentar novamente.")
-                time.sleep(espera)
-        else:
-            espera = 0.2
-            registrar(f"Filósofo {numero} espera {espera}s para tentar novamente.")
-            time.sleep(espera)
+                with garfos_condition:
+                    soltar_garfo(numero, menor)
+                    garfos_condition.notify_all()
+        elif pegar_segundo_garfo:
+            with garfos_condition:
+                soltar_garfo(numero, maior)
+                garfos_condition.notify_all()
 
 def todos_com_fome():
     return all(estado == "com fome" for estado in estados.values())
