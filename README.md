@@ -109,6 +109,7 @@ python parte_1_versao_corrigida.py
 No topo do arquivo ficam as constantes usadas no programa. Se quiser testar sem a pausa entre pegar o garfo, basta substituir o valor da constante "PAUSA_ENTRE_GARFOS" para 0
 
 ### Pseudocódigo da versão corrigida
+```
 N = 5
 garfos 1..N, o garfo i fica entre os filósofos i e i+1 (o garfo N fica entre N e 1)
 
@@ -133,7 +134,7 @@ para cada filósofo p:
         liberar(esquerdo)
         garfos_condition.notify_all() //notifica liberação para quem está na fila esperando
         estado[p] <- "pensando"
-
+```
 
 ### Log de uma execução sem deadlock
 <details>
