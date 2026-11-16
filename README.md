@@ -1,6 +1,6 @@
 # TDE Programação Concorrente: Filósofos, Semáforos e Deadlock
 
-Vídeo da apresentação: [(link do YouTube)](https://youtu.be/GeY30snudDA)
+Vídeo da apresentação: [link do YouTube](https://youtu.be/GeY30snudDA)
 
 Grupo: TDE2 4
 
